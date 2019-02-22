@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="../../css/mui.min.css"/>
+</head>
+<body>
+	<!-- 中间部分 -->
+	<div class="mui-content">
+		<div class="mui-slider">
+			<div class="mui-slider-group mui-slider-loop"">
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<!-- 具体内容 -->
+					<a href="#"><img src="../../images/img/0.jpg" /></a>
+				</div>
+				
+				<!--第一个内容区容器-->
+				<div class="mui-slider-item">
+				  <!-- 具体内容 -->
+				  <a href="#"><img src="../../images/img/1.jpg" /></a>
+				</div>
+				<!--第二个内容区-->
+				<div class="mui-slider-item">
+				  <!-- 具体内容 -->
+				  <a href="#"><img src="../../images/img/2.jpg" /></a>
+				</div>
+				<!--第三个内容区-->
+				<div class="mui-slider-item">
+					<!-- 具体内容 -->
+					<a href="#"><img src="../../images/img/3.jpg" /></a>
+				</div>
+				<!--第四个内容区-->
+				<div class="mui-slider-item">
+					<!-- 具体内容 -->
+					<a href="#"><img src="../../images/img/0.jpg" /></a>
+				</div>
+				
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<!-- 具体内容 -->
+					<a href="#"><img src="../../images/img/1.jpg" /></a>
+				</div>
+			</div>
+		</div>
+		<div id="info">
+			你正在看第1张图片
+		</div>
+	</div>
+</body>
+<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/myJs/newAjax.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	// 获得slider插件对象
+	var index_gallery = mui('.mui-slider');
+	index_gallery.slider({
+		interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
+	});
+	//跳转到第index张图片，index从0开始；
+	// index_gallery.slider().gotoItem(0);
+	
+	// 监听跳转事件
+	document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+		//注意slideNumber是从0开始的；
+		document.getElementById("info").innerText = "你正在看第"+(event.detail.slideNumber+1)+"张图片";
+	});
+</script>
+</html>

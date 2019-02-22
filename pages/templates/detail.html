@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>detail</title>
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<!-- 引入APP的样式 -->
+		<link rel="stylesheet" type="text/css" href="../../css/app.css" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title" id="title"></h1>
+		</header>
+		<div class="mui-content">
+			<!-- <br/><br/> -->
+			<div id="showId"></div>
+		</div>
+	</body>
+	<script src="../../js/mui.js"></script>
+	<script src="../../js/myJs/newAjax.js"></script>
+	<script type="text/javascript">
+		mui.init();
+		document.addEventListener("getDetail", function(e) {
+			// console.log(e.detail.title); //获取参数
+			// var getDetail = plus.webview.currentWebview(); // 页面的id
+			mui("#showId")[0].innerText = e.detail.id + "你获取到了id";
+			// console.log(e.detail.title);
+			mui("#title")[0].innerText = e.detail.title;
+			// var detail_id = e.detail.id;		
+		})
+	</script>
+</html>

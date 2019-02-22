@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<!-- 引入APP的样式 -->
+		<link rel="stylesheet" type="text/css" href="../../css/app.css" />
+	</head>
+
+	<body id="login-body">
+		<div class="mui-content">
+			<div id="login-main-body">
+				<form class='mui-input-group'>
+					<div class="mui-input-row">
+						<label>账户名</label>
+						<input type='text' placeholder="请输入用户名" name="name" id="login-name"/>
+					</div>
+					<div class="mui-input-row">
+						<label>密码</label>
+						<input class='mui-input-password' type='password' placeholder="请输入密码" name="pwd" id="login-pwd"/>
+					</div>
+					<div class="mui-button-row">
+						<button type="button" class="mui-btn mui-btn-primary" id="login-submit-btn">确认</button>&nbsp;&nbsp;
+						<button type="reset" class="mui-btn mui-btn-primary" id="login-reset-btn">取消</button>
+						<!-- <button type="button" class="mui-btn mui-btn-primary" id="login-back-btn">返回</button> -->
+					</div>
+				</form>
+			</div>
+			
+			 <!-- 显示一下结果 -->
+			<div id="user_test"></div>
+		</div>		
+	</body>
+	<script src="../../js/mui.js"></script>
+	<script src="../../js/myJs/newAjax.js"></script>
+	<script type="text/javascript">
+		mui.init();
+		mui.toast('账号为：M  密码为：1',{ duration:'short', type:'div' });
+		// 触发跳转
+		var submitBtn = document.getElementById("login-submit-btn");
+		var resetBtn = document.getElementById("login-reset-btn");
+		//监听点击事件		
+		submitBtn.addEventListener("tap", function() {
+			var params = {
+				name: document.getElementById("login-name").value,
+				pwd: document.getElementById("login-pwd").value
+			}
+			newAjax("post", 'Login/doLogin', params, false, doLogin);
+		}) 
+		// callback函数
+		var doLogin = function(data) {
+			alert(data.msg);
+			if(data.code != 0) {
+				// mui('#user_test')[0].innerHTML = "用户名为：" + data.data[0].name + "密码为：" + data.data[0].pwd;
+				mui.openWindow({
+					url: '../person/person_menu.html', //page[i]
+					id: 'person'
+				})
+			}
+		}
+	</script>
+</html>

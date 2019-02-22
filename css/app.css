@@ -1,0 +1,82 @@
+/*
+ *这是单独为hello mui准备的个性化css，可以覆盖标准mui的css定义；
+ * 在实际项目开发时，建议为App单独写一个css文件，从而实现项目的自定义皮肤功能；
+ * 
+ * */
+.mui-plus header.mui-bar{
+	/* display: none; */
+}
+.mui-plus .mui-bar-nav~.mui-content{
+	/* padding: 0; */
+}
+ /* 上述两行不能添加，否在在真机调试的时候便会看不到头部 */
+
+/*hm开头的表示仅为 Hello MUI示例定义*/
+.hm-description{
+	margin: .5em 0;
+}
+
+.hm-description>li {
+	/* font-size: 14px; */
+	font-size: 0.875em;
+	color: #8f8f94;
+}
+
+ /*  mj edit  */
+ /* 
+ vh:手机屏幕高度的百分比 1vh = 1%屏幕高度
+ vw:手机屏幕宽度的百分比 1vw = 1% 屏幕宽度
+ rem:html根元素的font-size字体大小 1rem = font-size
+ 做的手机版的网页，都是用的弹性盒子flex+rem布局
+ 字体大小，盒子的宽高都可以用rem布局
+ 但是如果你不想你的整个页面有滚动条的话 就结合flex布局 flex=1
+ 让一块区域自动补全剩余空间,给部分区域使用over-folw属性
+ 
+ 1em=16px。那么12px=0.75em,10px=0.625em
+ */
+ #one-header {
+ 	width: 100%;
+	height: 1.5em;
+ 	background-color: lightblue;
+ 	text-align: center;
+ }
+ #one-header-input {
+ 	/* width: 260px;
+ 	height: 35px;
+ 	border: 1px solid #C7C7CC;
+ 	background-color: #FFFFFF;
+ 	margin-top: 10px; */
+	width: 16.25em;
+	height: 2.1875em;
+	border: 0.0625em solid #C7C7CC;
+	background-color: #FFFFFF;
+	margin-top: 0.625em;
+ }
+ #my-slider {
+ 	padding: 0.3125em;
+ }
+ #my-list {
+ 	padding: 0.3125em;
+ }
+ 
+ /* login start */
+/* #login-body {
+	position: absolute;
+} */
+#login-main-body {
+	width: 96%;
+	height: 7.5em;
+	position: relative;
+	top: 50%;
+	/* top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0; */
+	margin: auto;
+	/* border: 0.0625em solid red; */
+	margin-top: 7.5em;
+}
+ /* login end */
+#muiUpRefresh {
+	margin-top: -0.9375em;
+}

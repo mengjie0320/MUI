@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/app.css" rel="stylesheet"/>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<!-- <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a> -->
+			<h1 class="mui-title">person_menu</h1>
+			<a id="icon-menu" class="mui-icon-bars mui-icon mui-icon-right-nav mui-pull-right"></a>
+		</header>
+		<div class="mui-content">
+			<br/>
+			这是个人主页面哦！你跳转主页面成功了！
+			<br/><br/>
+			<button type="button" class="mui-btn mui-btn-primary" id="back-button">跳转回主页面</button>
+			<br/><br/>
+			<button type="button" class="mui-btn mui-btn-primary" id="logout">退出</button>
+		</div>		
+	</body>
+	<script src="../../js/mui.js"></script>
+	<script src="../../js/myJs/newAjax.js"></script>
+	<script type="text/javascript">
+		mui.init();
+		mui(".mui-bar").on("tap","#icon-menu",function(){
+			mui.openWindow({
+				url: '../../index.html', //page[i]
+				id: 'index'
+			})
+		});
+		// 触发跳转
+		var btn = document.getElementById("back-button");
+		//监听点击事件
+		btn.addEventListener("tap",function () {
+			//console.log("tap event trigger");
+			mui.openWindow({
+				url: '../../index.html', //page[i]
+				id: 'index'
+			})
+		});
+		
+		mui(".mui-content").on('tap','#logout',function(){
+			newAjax("get", 'Login/Logout', {}, false, logout);
+		});
+		var logout = function (data) {
+			if(data.code == 1) {
+				mui.openWindow({
+					url: '../login/login.html', //page[i]
+					id: 'login'
+				})
+			} else {
+				alert("请重试");
+			}
+		}
+	</script>
+</html>

@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<!-- 引入APP的样式 -->
+		<link rel="stylesheet" type="text/css" href="css/app.css" />
+	</head>
+
+	<body>
+		<!-- 头部 -->
+		<header class="mui-bar mui-bar-nav mui-bar-nav-bg one-header">
+			<!-- <a id="icon-menu" class="mui-icon-bars mui-icon mui-icon-left-nav mui-pull-left"></a> -->
+			<a class="mui-icon mui-icon-person mui-pull-right mui-a-color"></a>
+			<h1 class="mui-title" id="mui-title">首页</h1>
+		</header>
+		<!-- mui-action-back可以退回 -->
+		<!-- 底部 -->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="#tabbar">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-contact">
+				<span class="mui-icon mui-icon-refreshempty"></span>
+				<span class="mui-tab-label">下拉刷新</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-chat">
+				<span class="mui-icon mui-icon-refreshempty">
+					<!-- <span class="mui-badge">9</span> -->
+				</span>
+				<span class="mui-tab-label">上拉加载</span>
+			</a>		
+			<a class="mui-tab-item" href="#tabbar-with-map">
+				<span class="mui-icon mui-icon-paperclip"></span>
+				<span class="mui-tab-label">Echarts</span>
+			</a>
+		</nav>
+		
+		<script src="js/mui.js"></script>
+		<script src="js/myJs/newAjax.js"></script>
+		<script type="text/javascript">
+			
+			mui.init(); //每个页面都要初始化
+			// 右边跳转到登录页面 
+			mui('.mui-bar-nav').on('tap','.mui-icon-person',function(){
+				newAjax("post", 'Login/doLogin', {}, false, testLogin);
+			});
+			var testLogin = function (data) {
+				if(data.code != 0) {
+					mui.toast('您已经登录',{ duration:'short', type:'div' }) 
+					mui.openWindow({
+						url: './pages/person/person_menu.html', //page[i]
+						id: 'person'
+					})
+				} else {
+					mui.openWindow({
+						url: './pages/login/login.html', //page[i]
+						id: 'login'
+					})
+				}
+			}
+			// 切换底部选项卡
+			mui.plusReady(function(){
+				var pages = ['./pages/templates/index.html', './pages/templates/pullDownToRefresh.html', './pages/templates/pullUpToRefresh.html', './pages/templates/echarts.html'];
+				var arr = document.getElementsByClassName("mui-tab-item")
+				var styles = {
+					top:"45px",
+					bottom:"51px"
+				}
+				var pageArr = [];
+				var slef = plus.webview.currentWebview();
+				var title = document.getElementById("mui-title");
+				var title_arr = ['首页', '下拉刷新', '上拉加载','Echarts'];
+				for(var i=0; i<arr.length; i++){        // 有几个选项卡，需要创建几个子页面
+					var page = plus.webview.create(pages[i],pages[i],styles);
+					pageArr.push(page);
+					!function(i){
+						arr[i].addEventListener("tap",function(){
+							// 让当前页面(i)显示，不是当前页面隐藏
+							for(var j=0; j<pageArr.length; j++){
+								if(j!=i) pageArr[j].hide(); 
+								else pageArr[j].show();
+							} 
+							/* 让新创建的webview，追加合并到当前的窗口上。合并成一个窗口。
+							 * 目的：将父子窗口合并成一个页面，实现同开同关的效果。 避免点击返回安监室，子页面先关闭，而父页面的头部和尾部没有关闭的BUG。
+							 */
+							slef.append(pageArr[i]);
+							title.innerText = title_arr[i];
+							// chart（EChart图表）
+						})
+					}(i);
+				}
+				// 默认触发第0个选项卡的tap事件。
+				mui.trigger(arr[0],"tap");
+			});
+		</script>
+	</body>
+	 <!--
+	  
+	  mui.plusReady(function(){    var arr = document.getElementsByTagName("a");for(var i=0; i<arr.length; i++){    !function(i){
+        arr[i].addEventListener("tap",function(){
+            mui.openWindowWithTitle({
+                url:"0102-detail.html",
+                id:"0102-detail.html",
+                styles:{
+                },
+                extras:{                    // 打开页面的同时，向新页面传递数据。                    newsId : i
+                }
+            },{                //标题栏的背景色和底边线配置
+                backgroundColor:"#C9302C",                //bottomBorderColor:"#00ff00",                title:{                    //标题文字的内容和样式配置
+                    text:"新闻详情"+(i+1),
+                    styles:{
+                        color:"#FFFFFF",
+                        align:"center",
+                        family:"'Helvetica Neue',Helvetica,sans-serif",
+                        size:"20px",
+                        style:"normal",
+                        weight:"bold",
+                    }
+                },
+                back:{
+                    image:{                /*返回箭头图片可以使用imgSrc，也可以使用base64编码*/
+                        //imgSrc:"img/back.png"
+                        base64Data:"data:image/png;base64,……"
+                    }
+                }
+            })
+        })
+    }(i);
+}
+});
+	  -->
+
+</html>

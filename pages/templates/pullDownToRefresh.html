@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<!-- 引入APP的样式 -->
+		<link rel="stylesheet" type="text/css" href="../../css/app.css" />
+	</head>
+
+	<body>
+		<!-- 头部 -->
+		<!-- 中间 -->
+		<div class="mui-content" id="muiDownRefresh">
+			<!-- 列表 -->
+			<ul class="mui-table-view" id="downRefreshContainer"></ul>
+		</div>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/myJs/newAjax.js"></script>
+		<script type="text/javascript">
+			mui.plusReady(function(){
+				mui.preload({
+					url: 'detail.html',
+					id: 'detail',
+					style: {},
+					extras: {}
+				})
+			})
+			//每个页面都要初始化
+			mui.init({
+				pullRefresh : {
+					container: muiDownRefresh,//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+					down: {
+						style: 'circle', //必选,下拉刷新样式,目前支持原生5+'cicle'样式
+					  	height: 50,//可选.默认50.触发上拉加载拖动距离
+						auto: true,//可选,默认false.自动上拉加载一次
+						color:'#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+						height:'50px',//可选,默认50px.下拉刷新控件的高度,
+						range:'100px', //可选 默认100px,控件可下拉拖拽的范围
+						offset:'0px', //可选 默认0px,下拉刷新控件的起始位置
+						contentrefresh: "loading...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+						contentnomore: 'no more datas',//可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: downContent //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+					}
+				}
+			});
+			var moreData = true, pageNum = 1, _this;
+			function downContent () {
+				var params = {
+					pageSize: 4,
+					currentPage: pageNum
+				}
+				newAjax("post","Index/getData", params, false, endRefresh);
+				_this = this;
+				++ pageNum;
+			}
+			var endRefresh = function(data) {
+				if(data.code == 1) {
+					var dataArr = data.data;
+					var refresh_text = "";
+					for(var i=0,len=dataArr.length; i< len; i++) {
+						refresh_text += '<li class="mui-table-view-cell mui-media" id="'
+							+ dataArr[i].id + '"><a href="javascript:;">'
+							+'<img class="mui-media-object mui-pull-left" src=" '
+							+ dataArr[i].img_url +'"><div class="mui-media-body"> '
+							+ dataArr[i].title +'<p class="mui-ellipsis">'
+							+ dataArr[i].text +'</p></div></a></li>';
+					}
+					mui("#downRefreshContainer")[0].innerHTML = refresh_text + mui("#downRefreshContainer")[0].innerHTML;
+				} else {
+					moreData = false;
+				}
+				mui('#muiDownRefresh').pullRefresh().endPulldown(true);
+			}
+			// 对每个li添加点击监听事件,打开新的页面展示更多信息
+			mui(".mui-table-view").on('tap','.mui-table-view-cell',function(){
+				//获取id
+				var id = this.getAttribute("id");
+				// console.log(id);
+				//传值给详情页面，通知加载新数据
+				var detail = plus.webview.getWebviewById("detail");
+				mui.fire(detail,'getDetail',{id: id, title: "aa"});
+				//打开新闻详情
+				mui.openWindow({
+					id: 'detail',
+					url: './detail.html'
+				});
+			});
+		</script>
+	</body>
+</html>

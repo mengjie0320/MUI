@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			utils事件
+		</title>
+	</head>
+	<body>
+		
+	</body>
+	<script>
+		mui.init({
+		//子页面
+			subpages: [{
+				//...
+			}],
+		//预加载
+			 preloadPages:[
+				//...
+			 ],
+		//下拉刷新、上拉加载
+			pullRefresh : {
+			   //...
+				},
+		//手势配置
+			 gestureConfig:{
+			   //...
+			},
+		//侧滑关闭
+			swipeBack:true, //Boolean(默认false)启用右滑关闭功能
+			
+		//监听Android手机的back、menu按键
+			keyEventBind: {
+				backbutton: false,  //Boolean(默认true)关闭back按键监听
+				menubutton: false   //Boolean(默认true)关闭menu按键监听
+			},
+		//处理窗口关闭前的业务
+			beforeback: function() {
+				//... //窗口关闭前处理其他业务详情点击 ↑ "关闭页面"链接查看
+			},
+		//设置状态栏颜色
+			statusBarBackground: '#9defbcg', //设置状态栏颜色,仅iOS可用
+			preloadLimit:5//预加载窗口数量限制(一旦超出,先进先出)默认不限制
+		})
+	</script>
+</html>

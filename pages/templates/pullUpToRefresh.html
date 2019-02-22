@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<!-- 引入APP的样式 -->
+		<link rel="stylesheet" type="text/css" href="../../css/app.css" />
+	</head>
+
+	<body>
+		<!-- 头部 -->
+		<!-- 中间 -->
+		<div class="mui-content" id="muiUpRefresh">
+			<!-- 列表 -->
+			<ul class="mui-table-view" id="upRefreshContainer"></ul>
+		</div>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/myJs/newAjax.js"></script>
+		<script type="text/javascript">
+			mui.plusReady(function(){
+				mui.preload({
+					url: 'detail.html',
+					id: 'detail',
+					style: {},
+					extras: {}
+				})
+			})
+			//每个页面都要初始化
+			mui.init({
+				pullRefresh : {
+					container: muiUpRefresh,//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+					up: {
+					  	height: 50,//可选.默认50.触发上拉加载拖动距离
+						auto: true,//可选,默认false.自动上拉加载一次
+						contentrefresh: "loading...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+						contentnomore: 'no more datas',//可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: upContent //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+					}
+				}
+			});
+			var moreData = true, pageNum = 1, _this;
+			
+			function upContent () {
+				mask.show();//显示遮罩
+				var params = {
+					pageSize: 4,
+					currentPage: pageNum
+				}
+				newAjax("post","Index/getData", params, false, endRefresh);
+				_this = this;
+				++ pageNum;
+			}
+			var endRefresh = function(data) {
+				if(data.code == 1) {
+					var dataArr = data.data;
+					var refresh_text = "";
+					for(var i=0,len=dataArr.length; i< len; i++) {
+						refresh_text += '<li class="mui-table-view-cell mui-media" id="'
+							+ dataArr[i].id + '"><a href="javascript:;">'
+							+'<img class="mui-media-object mui-pull-left" src=" '
+							+ dataArr[i].img_url +'"><div class="mui-media-body"> '
+							+ dataArr[i].title +'<p class="mui-ellipsis">'
+							+ dataArr[i].text +'</p></div></a></li>';
+					}
+					mui("#upRefreshContainer")[0].innerHTML = refresh_text + mui("#upRefreshContainer")[0].innerHTML;
+				} else {
+					moreData = false;
+				}
+				// console.log(moreData);
+				if(moreData) {
+					_this.endPullupToRefresh(false);
+				} else {
+					_this.endPullupToRefresh(true);
+					mui("#muiUpRefresh").pullRefresh().disablePullupToRefresh();
+					// console.log("上拉加载已被禁用");
+				}
+				mask.close();//关闭遮罩
+			}
+			// 对每个li添加点击监听事件,打开新的页面展示更多信息
+			mui(".mui-table-view").on('tap','.mui-table-view-cell',function(){
+				//获取id
+				var id = this.getAttribute("id");
+				//传值给详情页面，通知加载新数据
+				var detail = plus.webview.getWebviewById("detail");
+				mui.fire(detail,'getDetail',{id: id, title: "aa"});
+				//打开新闻详情
+				mui.openWindow({
+					id: 'detail',
+					url: './detail.html'
+				});
+			}) 
+			// this.endPullupToRefresh(true|false); // 关掉正在加载...nomore 是否还有更多数据；若还有更多数据，则传入false;
+			// 否则传入true，之后滚动条滚动到底时，将不再显示“上拉显示更多”的提示语，而显示“没有更多数据了”的提示语；
+			// mui('#pullup-container').pullRefresh().refresh(true);  重置
+			// mui('#pullup-container').pullRefresh().disablePullupToRefresh();  // 禁用
+			// mui('#pullup-container').pullRefresh().enablePullupToRefresh();  // 启用
+		</script>
+	</body>
+</html>
